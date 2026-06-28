@@ -70,14 +70,15 @@ h1,h2,h3,.brand,.amount-big{font-family:'Poppins',sans-serif;}
     color: #ffffff;
     font-size: 21px;
     font-weight: 600;
+    border-radius: 40%;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
     box-shadow: black;
     transition: .1s;
 }
-.pinPad button:hover{background:#000000;border-color:#f5068694;}
+.pinPad button:hover{background:#000000;border-color:#000000;}
 .pinPad button:active{transform:scale(.90);box-shadow:0 1px 4px rgba(30,60,120,.12);}
-.pinPad button.pinClear{font-size:18px;color:#7b8aaa;background:transparent;border:none;box-shadow:none;font-weight:600;}
+.pinPad button.pinClear{font-size:18px;color:#000000;background:transparent;border:none;box-shadow:none;font-weight:600;}
 .pinPad button.pinClear:hover{color:#3a5ccc;}
 .pinError{color:#e05050;font-size:12.5px;margin-top:16px;height:16px;font-weight:600;}
 
@@ -383,8 +384,8 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 
 /* White card */
 .auth-card {
- background: #668584;
- border-radius: 28px;
+ background: #4c7775;
+ border-radius: 20px;
  padding: 36px 28px 32px;
  width: 100%;
  max-width: 390px;
@@ -461,7 +462,7 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 }
 .auth-sub {
  font-size: 13px;
- color: #7b8aaa;
+ color: #ffffff;
  margin-bottom: 28px;
  line-height: 1.55;
 }
@@ -726,8 +727,8 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
  transition: .15s;
 }
 .auth-pin-dots span.filled {
- background: #3a5ccc;
- border-color: #3a5ccc;
+ background: #f4ea1f;
+ border-color: #02050f;
 }
 
 /* PIN pad inside auth card */
@@ -740,7 +741,7 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 }
 .auth-pin-pad button {
  height: 60px;
- border-radius: 50%;
+ border-radius: 20%;
  border: 1.5px solid #e0e8f4;
  background: #f4f7fb;
  color: #1a2340;
@@ -754,14 +755,14 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 .auth-pin-pad button:hover { background: #e8eef8; border-color: #3a5ccc; }
 .auth-pin-pad button:active { transform: scale(.93); }
 .auth-pin-pad button.pin-util {
- font-size: 12px;
- color: #7b8aaa;
+ font-size: 19px;
+ color: #ffffff;
  background: transparent;
  border: none;
  box-shadow: none;
  font-weight: 600;
 }
-.auth-pin-pad button.pin-util:hover { color: #3a5ccc; background: transparent; }
+.auth-pin-pad button.pin-util:hover { color: #ffffff; background: transparent; }
 
 /* Logout confirm modal */
 #logoutConfirmModal {
@@ -1007,7 +1008,7 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 
     <!-- Step 3: Set New PIN -->
     <div id="fpinStep3" style="display:none;text-align:center;">
-     <div style="width:52px;height:52px;border-radius:16px;background:rgba(58,92,204,.10);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px;margin-left:auto;margin-right:auto;">🆕</div>
+     <!-- <div style="width:52px;height:52px;border-radius:16px;background:rgba(58,92,204,.10);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px;margin-left:auto;margin-right:auto;"></div> -->
      <div class="auth-heading" style="text-align:center;">Set New PIN</div>
      <div class="auth-sub" style="text-align:center;">Choose a new 4-digit PIN. Keep it safe!</div>
 
