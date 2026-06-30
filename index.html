@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0b0e14">
 <title>Tracker</title>
 <!-- app refresh code  -->
-<!-- <meta http-equiv="refresh" content="101"> -->
+<meta http-equiv="refresh" content="101">
 
 <!-- Fonts: preconnect + display=swap so text shows instantly with fallback font -->
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -53,6 +53,57 @@ h1,h2,h3,.brand,.amount-big{font-family:'Poppins',sans-serif;}
 
 /* ===== Status / Top spacing ===== */
 .statusbar{height:14px;}
+
+/* ===== Firebase Connection Status Indicator ===== */
+#firebaseStatusIndicator {
+ position: fixed;
+ top: 12px;
+ right: 12px;
+ z-index: 8888;
+ padding: 8px 14px;
+ border-radius: 20px;
+ font-size: 12px;
+ font-weight: 600;
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ backdrop-filter: blur(10px);
+ transition: all 0.3s ease;
+ border: 1px solid rgba(255,255,255,0.1);
+}
+
+#firebaseStatusIndicator.connected {
+ background: rgba(61, 220, 132, 0.15);
+ color: #3ddc84;
+ border-color: rgba(61, 220, 132, 0.3);
+}
+
+#firebaseStatusIndicator.disconnected {
+ background: rgba(240, 100, 100, 0.15);
+ color: #f06464;
+ border-color: rgba(240, 100, 100, 0.3);
+}
+
+#firebaseStatusIndicator .status-dot {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ display: inline-block;
+ animation: pulse 2s infinite;
+}
+
+#firebaseStatusIndicator.connected .status-dot {
+ background: #3ddc84;
+}
+
+#firebaseStatusIndicator.disconnected .status-dot {
+ background: #f06464;
+}
+
+@keyframes pulse {
+ 0%, 100% { opacity: 1; }
+ 50% { opacity: 0.5; }
+}
 
 #pinLockScreen{
  position:fixed;inset:0;z-index:9999;
@@ -828,6 +879,14 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- FIREBASE CONNECTION STATUS INDICATOR ─────────────────────────────────── -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="firebaseStatusIndicator" class="disconnected">
+ <span class="status-dot"></span>
+ <span id="firebaseStatusText">Firebase</span>
+</div>
+
 <!-- LOADING PAGE -->
 <div id="loadingPage">
  <div class="loader"></div>
@@ -1123,7 +1182,10 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 </div>
  <!-- <div class="sub"><i class="ti ti-calendar" style="font-size:13px;"></i> June 2026</div> -->
  </div>
- <div class="icon-circle"><i class="ti ti-bell"></i></div>
+ <div class="icon-circle" id="bellIconBtn" onclick="toggleEventLogPanel()" style="position:relative;cursor:pointer;">
+  <i class="ti ti-bell"></i>
+  <span id="bellUnreadDot" style="display:none;position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#f06464;"></span>
+ </div>
  </div>
 
  <div class="balance-card">
@@ -1355,7 +1417,7 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
  <div class="pemail" id="profileEmail">Loading...</div>
  </div>
 
- <div class="menu-item" onclick="showNotification('Accounts feature coming soon','success')"><div class="mico"><i class="ti ti-wallet"></i></div><div class="mtext">Manage Accounts</div><div class="chev"><i class="ti ti-chevron-right"></i></div></div>
+ <div class="menu-item" onclick="toggleSyncStatusPanel()"><div class="mico"><i class="ti ti-wallet"></i></div><div class="mtext">Manage Accounts</div><div class="chev"><i class="ti ti-chevron-right"></i></div></div>
  <div class="menu-item" onclick="openPartyManager()"><div class="mico"><i class="ti ti-users"></i></div><div class="mtext">Manage / Add Party</div><div class="chev"><i class="ti ti-chevron-right"></i></div></div>
  <div class="menu-item" onclick="openDeletedHistory()"><div class="mico"><i class="ti ti-history"></i></div><div class="mtext">Deleted Entry History</div><div class="chev"><i class="ti ti-chevron-right"></i></div></div>
  <div class="menu-item" onclick="exportDataAsJSON()"><div class="mico"><i class="ti ti-cloud-upload"></i></div><div class="mtext">Backup Data</div><div class="chev"><i class="ti ti-chevron-right"></i></div></div>
@@ -1518,16 +1580,160 @@ body.light-theme .flabel, body.light-theme .pemail, body.light-theme .label{ col
 // Firebase Console -> Project Settings -> General -> Your apps -> Web app config
 // ===== FIREBASE CONFIG (initialized lazily after UI paints) =====
 const firebaseConfig = {
-   apiKey: "AIzaSyCW96QUnK23q8TndpSWZt5zvrPoJCeQMS4",
-  authDomain: "expay-d0b1d.firebaseapp.com",
-  databaseURL: "https://expay-d0b1d-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "expay-d0b1d",
-  storageBucket: "expay-d0b1d.firebasestorage.app",
-  messagingSenderId: "324706776796",
-  appId: "1:324706776796:web:5aecb0eab9fe0aaf5aa619",
-  measurementId: "G-Y4PCQ0XFBD"
+ apiKey: "AIzaSyBneDVwogH0WiEmAAvLHu_Tq862DmDOwmI",
+  authDomain: "daytoday-e6646.firebaseapp.com",
+  databaseURL: "https://daytoday-e6646-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "daytoday-e6646",
+  storageBucket: "daytoday-e6646.firebasestorage.app",
+  messagingSenderId: "125507121584",
+  appId: "1:125507121584:web:87dec9292e70d7a919e675",
+  measurementId: "G-SK7GX8RVEH"
 };
+
 let firebaseReady = false;
+
+// ── Activity tracking for Bell icon & Manage Accounts panel ──
+let firebaseEventLog = [];   // {time, message, type}
+let entrySyncLog = [];       // {time, message, type, entryLabel}
+
+function logFirebaseEvent(message, type = 'info') {
+ firebaseEventLog.unshift({ time: new Date(), message, type });
+ if (firebaseEventLog.length > 30) firebaseEventLog.pop();
+ const dot = document.getElementById('bellUnreadDot');
+ if (dot) dot.style.display = '';
+}
+
+function logEntrySync(message, type = 'info', entryLabel = '') {
+ entrySyncLog.unshift({ time: new Date(), message, type, entryLabel });
+ if (entrySyncLog.length > 30) entrySyncLog.pop();
+}
+
+function formatLogTime(d) {
+ return d.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+
+function renderEventLogList() {
+ const liveStatus = document.getElementById('eventLogLiveStatus');
+ if (liveStatus) {
+  const isConnected = !!(window.firebase && firebaseReady);
+  const realAuthUser = (window.firebase && firebase.auth) ? firebase.auth().currentUser : null;
+  const statusColor = isConnected && realAuthUser ? '#3ddc84' : (isConnected ? '#f6b042' : '#f06464');
+  const statusText = isConnected && realAuthUser ? 'Connected'
+   : isConnected ? 'Connected (session not verified)'
+   : 'Not connected';
+  liveStatus.innerHTML = `
+   <div style="display:flex;align-items:center;gap:8px;">
+    <span style="width:9px;height:9px;border-radius:50%;background:${statusColor};display:inline-block;"></span>
+    <span style="color:#e8eaf0;font-weight:600;font-size:13.5px;">Firebase: ${statusText}</span>
+   </div>
+   ${realAuthUser ? `<div style="color:#8b9099;font-size:12px;margin-top:4px;">Signed in as ${realAuthUser.email}</div>` : ''}
+  `;
+ }
+
+ const list = document.getElementById('eventLogList');
+ if (!list) return;
+ if (firebaseEventLog.length === 0) {
+  list.innerHTML = '<div style="color:#8b9099;font-size:13px;text-align:center;padding:30px 0;">No activity yet</div>';
+  return;
+ }
+ list.innerHTML = firebaseEventLog.map(item => {
+  const color = item.type === 'error' ? '#f06464' : (item.type === 'warning' ? '#f6b042' : '#3ddc84');
+  const icon  = item.type === 'error' ? 'ti-alert-circle' : (item.type === 'warning' ? 'ti-alert-triangle' : 'ti-circle-check');
+  return `<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #1c212b;">
+   <i class="ti ${icon}" style="color:${color};font-size:18px;margin-top:2px;"></i>
+   <div>
+    <div style="color:#e8eaf0;font-size:13.5px;">${item.message}</div>
+    <div style="color:#6b7280;font-size:11px;margin-top:2px;">${formatLogTime(item.time)}</div>
+   </div>
+  </div>`;
+ }).join('');
+}
+
+function toggleEventLogPanel() {
+ const overlay = document.getElementById('eventLogOverlay');
+ const panel = document.getElementById('eventLogPanel');
+ const isOpen = panel.style.display === 'block';
+ overlay.style.display = isOpen ? 'none' : 'block';
+ panel.style.display = isOpen ? 'none' : 'block';
+ if (!isOpen) {
+  renderEventLogList();
+  const dot = document.getElementById('bellUnreadDot');
+  if (dot) dot.style.display = 'none';
+ }
+}
+
+function renderSyncStatusList() {
+ const list = document.getElementById('syncStatusList');
+ const summary = document.getElementById('syncStatusSummary');
+ const accountInfo = document.getElementById('syncAccountInfo');
+ if (!list || !summary) return;
+
+ if (accountInfo) {
+  const projectId = (typeof firebaseConfig !== 'undefined' && firebaseConfig.projectId) || 'Unknown';
+  const realAuthUser = (window.firebase && firebase.auth) ? firebase.auth().currentUser : null;
+  const signedInEmail = realAuthUser ? realAuthUser.email : (currentUser ? currentUser.email + ' (unverified session)' : 'Not signed in');
+  const isConnected = !!(window.firebase && firebaseReady);
+  const statusColor = isConnected && realAuthUser ? '#3ddc84' : '#f06464';
+  const statusText = isConnected && realAuthUser ? 'Active' : 'Inactive';
+
+  accountInfo.innerHTML = `
+   <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+    <span style="color:#8b9099;font-size:12.5px;">Firebase Project</span>
+    <span style="color:#e8eaf0;font-size:12.5px;font-weight:600;">${projectId}</span>
+   </div>
+   <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+    <span style="color:#8b9099;font-size:12.5px;">Signed in as</span>
+    <span style="color:#e8eaf0;font-size:12.5px;font-weight:600;">${signedInEmail}</span>
+   </div>
+   <div style="display:flex;justify-content:space-between;">
+    <span style="color:#8b9099;font-size:12.5px;">Session Status</span>
+    <span style="color:${statusColor};font-size:12.5px;font-weight:600;">${statusText}</span>
+   </div>
+  `;
+ }
+
+ const successCount = entrySyncLog.filter(i => i.type === 'success').length;
+ const errorCount   = entrySyncLog.filter(i => i.type === 'error').length;
+ const warningCount = entrySyncLog.filter(i => i.type === 'warning').length;
+
+ summary.innerHTML = `
+  <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+   <span>✅ Synced</span><span style="color:#3ddc84;font-weight:600;">${successCount}</span>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+   <span>⚠️ Local only</span><span style="color:#f6b042;font-weight:600;">${warningCount}</span>
+  </div>
+  <div style="display:flex;justify-content:space-between;">
+   <span>❌ Failed</span><span style="color:#f06464;font-weight:600;">${errorCount}</span>
+  </div>
+ `;
+
+ if (entrySyncLog.length === 0) {
+  list.innerHTML = '<div style="color:#8b9099;font-size:13px;text-align:center;padding:30px 0;">No entries saved yet</div>';
+  return;
+ }
+ list.innerHTML = entrySyncLog.map(item => {
+  const color = item.type === 'error' ? '#f06464' : (item.type === 'warning' ? '#f6b042' : '#3ddc84');
+  const icon  = item.type === 'error' ? 'ti-alert-circle' : (item.type === 'warning' ? 'ti-cloud-off' : 'ti-cloud-check');
+  return `<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #1c212b;">
+   <i class="ti ${icon}" style="color:${color};font-size:18px;margin-top:2px;"></i>
+   <div>
+    <div style="color:#e8eaf0;font-size:13.5px;">${item.message}${item.entryLabel ? ' — <span style="color:#8b9099;">' + item.entryLabel + '</span>' : ''}</div>
+    <div style="color:#6b7280;font-size:11px;margin-top:2px;">${formatLogTime(item.time)}</div>
+   </div>
+  </div>`;
+ }).join('');
+}
+
+function toggleSyncStatusPanel() {
+ const overlay = document.getElementById('syncStatusOverlay');
+ const panel = document.getElementById('syncStatusPanel');
+ const isOpen = panel.style.display === 'block';
+ overlay.style.display = isOpen ? 'none' : 'block';
+ panel.style.display = isOpen ? 'none' : 'block';
+ if (!isOpen) renderSyncStatusList();
+}
+
 let db = null;
 
 // ===== GOOGLE SIGN-IN CONFIGURATION =====
@@ -1554,8 +1760,18 @@ function handleGoogleSignInResponse(response) {
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
     const payload = JSON.parse(jsonPayload);
-    
+
+    // 🔒 Reject any Google account that isn't explicitly allowed BEFORE
+    // touching currentUser or localStorage — random accounts must never
+    // get a chance to see cached data.
+    const signedInEmail = (payload.email || '').trim().toLowerCase();
+    if (!ALLOWED_EMAILS.includes(signedInEmail)) {
+      blockUnauthorizedAccess(signedInEmail);
+      return;
+    }
+
     currentUser = {
+      uid: payload.sub, // 🔒 Firebase uses 'uid' as unique identifier
       id: payload.sub,
       name: payload.name,
       email: payload.email,
@@ -1563,10 +1779,11 @@ function handleGoogleSignInResponse(response) {
       credential: response.credential
     };
     
-    // Save to localStorage
+    // Save to localStorage (including uid for Firebase)
     localStorage.setItem('googleUser', JSON.stringify(currentUser));
+    localStorage.setItem('currentUserUid', currentUser.uid); // Separate storage for quick access
     
-    console.log('✅ Google Sign-In successful:', currentUser.email);
+    console.log('✅ Google Sign-In successful:', currentUser.email, 'uid:', currentUser.uid);
     showNotification('Signed in with Google successfully', 'success');
     updateLoginPageUserInfo();
     // Auto-proceed after brief delay to show user card
@@ -1586,7 +1803,18 @@ function checkUserSession() {
   const raw = savedGoogle || savedEmail;
   if (raw) {
     try {
-      currentUser = JSON.parse(raw);
+      const parsedUser = JSON.parse(raw);
+      const email = (parsedUser.email || '').trim().toLowerCase();
+
+      // 🔒 Defense-in-depth: even a previously-cached session must match
+      // an allowed email. If localStorage somehow holds an unauthorized
+      // account, never let it through — wipe and block.
+      if (!ALLOWED_EMAILS.includes(email)) {
+        blockUnauthorizedAccess(email);
+        return;
+      }
+
+      currentUser = parsedUser;
       console.log('✅ User session restored:', currentUser.email);
       updateLoginPageUserInfo();
       hideGoogleLoginPage();
@@ -1986,25 +2214,53 @@ function normalizeDate(date) {
 }
 
 async function saveEntryToFirebase(entryData) {
- if (!firebaseReady) {
- // LOCAL MODE: directly add/update in the in-memory entries array
-
+ if (!firebaseReady || !currentUser) {
  showNotification(editingEntryId ? 'Entry updated (local)' : 'Entry saved (local)', 'success');
+ logEntrySync('Saved locally (Firebase not ready)', 'warning', entryData.title || entryData.party || '');
  return;
  }
+
+ // 🔒 SAFETY CHECK: make sure the real Firebase Auth session is still alive.
+ // Browsers (privacy/tracking-prevention) can sometimes wipe Firebase Auth's
+ // storage even though our own localStorage "currentUser" still looks logged in.
+ // If that happens, Firestore Rules will reject every write with
+ // "Missing or insufficient permissions" even though the app thinks it's logged in.
+ const realAuthUser = firebase.auth ? firebase.auth().currentUser : null;
+ if (!realAuthUser) {
+ console.warn('⚠ Firebase Auth session missing — re-login required before saving');
+ logEntrySync('Save failed — session expired, please log in again', 'error', entryData.title || entryData.party || '');
+ showNotification('Session expired — please log in again to save data', 'error');
+ return;
+ }
+
  try {
+ // 🔒 ADD userId FOR SECURITY - entries can only be read by their owner
+ const userId = currentUser.uid || localStorage.getItem('currentUserUid');
+ const entryWithUserId = {
+  ...entryData,
+  userId: userId,
+  savedAt: new Date().toISOString()
+ };
+
  if (editingEntryId) {
- await db.collection('entries').doc(String(editingEntryId)).update(entryData);
- console.log('Entry updated in Firebase');
+  // Verify user owns this entry before updating (security check)
+  const docSnapshot = await db.collection('entries').doc(String(editingEntryId)).get();
+  if (docSnapshot.exists && docSnapshot.data().userId !== userId) {
+   throw new Error('Unauthorized: Cannot update another user\'s entry');
+  }
+  await db.collection('entries').doc(String(editingEntryId)).update(entryWithUserId);
+  console.log('✓ Entry updated in Firebase (userId verified)');
+  logEntrySync('Entry updated in Firestore', 'success', entryData.title || entryData.party || '');
  } else {
- // Use our own generated id as the Firestore document id too,
- // so future edit/delete calls (which use entry.id) always match.
- await db.collection('entries').doc(String(entryData.id)).set(entryData);
- console.log('Entry saved to Firebase');
+  await db.collection('entries').doc(String(entryData.id)).set(entryWithUserId);
+  console.log('✓ Entry saved to Firebase with userId:', userId);
+  logEntrySync('Entry saved to Firestore', 'success', entryData.title || entryData.party || '');
  }
  showNotification(editingEntryId ? 'Entry updated' : 'Entry saved', 'success');
  } catch (error) {
- console.error('Error saving entry:', error);
+ console.error('❌ Error saving entry to Firebase:', error);
+ const reason = error.code === 'permission-denied' ? 'Permission denied — check Firestore rules' : (error.message || 'unknown error');
+ logEntrySync('Save failed — ' + reason, 'error', entryData.title || entryData.party || '');
  showNotification('Firebase save error — saved locally instead', 'error');
  }
 }
@@ -2026,42 +2282,69 @@ async function deleteEntryFromFirebase(entryId) {
  }
 }
 
-// Pull all entries from Firestore (cloud) so data syncs across devices.
-// Falls back silently to whatever is already loaded from localStorage if Firebase isn't ready.
 async function loadEntriesFromFirebase() {
- if (!firebaseReady || !db) return;
+ if (!firebaseReady || !db || !currentUser) return;
  if (!navigator.onLine) { throw new Error('Offline — skipping Firebase fetch'); }
+
+ // 🔒 Make sure the REAL Firebase Auth session is actually ready before
+ // querying Firestore. Some browsers (Edge "Tracking Prevention", Safari
+ // ITP, etc.) can block the storage Firebase Auth needs to persist its
+ // session, so firebase.auth().currentUser may still be null right after
+ // a page reload even though our app's own localStorage says "logged in".
+ // Wait briefly for Firebase Auth to confirm the real session before giving up.
+ const realAuthUser = await new Promise(resolve => {
+  if (firebase.auth().currentUser) { resolve(firebase.auth().currentUser); return; }
+  const unsub = firebase.auth().onAuthStateChanged(u => { unsub(); resolve(u); });
+  setTimeout(() => resolve(firebase.auth().currentUser), 2500); // fallback timeout
+ });
+
+ if (!realAuthUser) {
+  logFirebaseEvent('No active Firebase session — please log in again', 'error');
+  showNotification('Session expired — please log in again', 'error');
+  currentUser = null;
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('currentUserUid');
+  showGoogleLoginPage();
+  return;
+ }
+
  try {
- const snapshot = await db.collection('entries').get();
+ const userId = currentUser.uid || localStorage.getItem('currentUserUid');
+ // 🔒 SECURE: Only load entries that belong to current user
+ const snapshot = await db.collection('entries')
+  .where('userId', '==', userId)
+  .get();
+
  const cloudEntries = [];
  snapshot.forEach(doc => {
- const data = doc.data();
- cloudEntries.push({
- id: doc.id,
- party: data.party || 'Unknown',
- method: data.method || data.cat || 'Cash',
- amount: parseFloat(data.amount) || 0,
- type: normalizeType(data.type),
- date: normalizeDate(data.date),
- time: data.time || '',
- notes: data.notes || '',
- timestamp: data.timestamp || new Date().toISOString()
+  const data = doc.data();
+  cloudEntries.push({
+   id: doc.id,
+   party: data.party || 'Unknown',
+   method: data.method || data.cat || 'Cash',
+   amount: parseFloat(data.amount) || 0,
+   type: normalizeType(data.type),
+   date: normalizeDate(data.date),
+   time: data.time || '',
+   notes: data.notes || '',
+   timestamp: data.timestamp || new Date().toISOString(),
+   userId: data.userId // Keep userId for reference
+  });
  });
- });
+ 
  // Newest first
  cloudEntries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
  if (cloudEntries.length === 0 && entries.length > 0) {
- console.warn('⚠ Firebase returned 0 entries while local has data — keeping local data, skipping overwrite.');
- return;
+  console.warn('⚠ Firebase returned 0 entries (might be first sync) — keeping local data');
+  return;
  }
 
  entries = cloudEntries;
- // Keep a local backup copy too, so the app still works offline
  localStorage.setItem('entries', JSON.stringify(entries));
- console.log('✓ Loaded from Firebase:', entries.length, 'entries');
+ console.log('✓ Loaded from Firebase:', entries.length, 'entries for user:', userId);
  } catch (error) {
- console.error('Error loading entries from Firebase:', error);
+ console.error('❌ Error loading entries from Firebase:', error);
  throw error;
  }
 }
@@ -3069,10 +3352,20 @@ document.addEventListener('DOMContentLoaded', () => {
  const savedUser = localStorage.getItem('googleUser') || localStorage.getItem('currentUser');
  if (savedUser) {
    try {
-     currentUser = JSON.parse(savedUser);
-     hideLoadingPage();
-     updateProfileEmail();
-     hideGoogleLoginPage(); // → shows PIN screen → user unlocks → app shows
+     const parsedUser = JSON.parse(savedUser);
+     const restoredEmail = (parsedUser.email || '').trim().toLowerCase();
+
+     // 🔒 Even a cached session must match an allowed email — block immediately
+     // if not, before any data has a chance to render.
+     if (typeof ALLOWED_EMAILS !== 'undefined' && !ALLOWED_EMAILS.includes(restoredEmail)) {
+       hideLoadingPage();
+       blockUnauthorizedAccess(restoredEmail);
+     } else {
+       currentUser = parsedUser;
+       hideLoadingPage();
+       updateProfileEmail();
+       hideGoogleLoginPage(); // → shows PIN screen → user unlocks → app shows
+     }
    } catch(e) {
      hideLoadingPage();
      showGoogleLoginPage();
@@ -3111,7 +3404,30 @@ function initFirebase() {
      db = firebase.firestore();
      db.enablePersistence().catch(err => console.warn('Persistence failed:', err));
      firebaseReady = true;
-     console.log("Firebase connected ✅");
+     
+     // 📡 UPDATE INDICATOR: Firebase Connected
+     updateFirebaseStatus(true);
+     console.log("✅ Firebase connected");
+     logFirebaseEvent('Connected to Firebase', 'success');
+
+     // 🔒 Watch the REAL Firebase Auth session. If our app thinks the user
+     // is logged in (currentUser set from localStorage) but Firebase Auth's
+     // own session has been wiped (e.g. by browser tracking-prevention /
+     // "Clear site data"), force the user to log in again instead of
+     // silently failing every Firestore save with "permission-denied".
+     firebase.auth().onAuthStateChanged(authUser => {
+       if (!authUser && currentUser && currentUser.source === 'email') {
+         console.warn('⚠ Firebase Auth session lost — forcing re-login');
+         logFirebaseEvent('Session lost — please log in again', 'error');
+         currentUser = null;
+         localStorage.removeItem('currentUser');
+         localStorage.removeItem('currentUserUid');
+         showNotification('Session expired — please log in again', 'error');
+         showGoogleLoginPage();
+       }
+     });
+
+     
      // Background sync after brief delay so UI stays fast
      setTimeout(async () => {
        try {
@@ -3122,14 +3438,35 @@ function initFirebase() {
          // Only re-render analytics if that screen is active
          if (document.getElementById('screen-analytics').classList.contains('active')) renderAnalytics();
          console.log('✓ Firebase sync done:', entries.length, 'entries');
+         logFirebaseEvent(`Synced ${entries.length} entries from Firestore`, 'success');
        } catch(err) {
          console.warn('⚠ Firebase sync failed, using local data:', err);
+         logFirebaseEvent('Firestore sync failed — using local data (' + (err.message || err.code || 'unknown error') + ')', 'error');
        }
      }, 800);
    }
  } catch(err) {
    console.warn('Firebase init failed, local mode:', err);
    firebaseReady = false;
+   updateFirebaseStatus(false);
+ }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// FIREBASE CONNECTION STATUS INDICATOR - UPDATE UI
+// ═══════════════════════════════════════════════════════════════════════
+function updateFirebaseStatus(isConnected) {
+ const indicator = document.getElementById('firebaseStatusIndicator');
+ const statusText = document.getElementById('firebaseStatusText');
+ 
+ if (isConnected) {
+   indicator.classList.remove('disconnected');
+   indicator.classList.add('connected');
+   statusText.textContent = 'Firebase ✓';
+ } else {
+   indicator.classList.remove('connected');
+   indicator.classList.add('disconnected');
+   statusText.textContent = 'Firebase ✗';
  }
 }
 
@@ -3739,6 +4076,45 @@ function togglePwVis(inputId, icon) {
 // ---- Allowed accounts (only these two emails can ever access the app) ----
 const ALLOWED_EMAILS = ["dharm6410@gmail.com", "dharm1331@gmail.com"];
 
+// 🔒 Called whenever a login attempt (Google or email) uses an email that
+// is NOT in ALLOWED_EMAILS. Immediately wipes any locally cached data,
+// signs the account out, shows a blocking screen, and sends them back to
+// the login page — so a random/unauthorized Google account can never see
+// or touch real entries, even briefly.
+function blockUnauthorizedAccess(attemptedEmail) {
+ console.warn('🚫 Unauthorized login attempt blocked:', attemptedEmail);
+
+ // Wipe any cached data so it can never flash on screen
+ entries = [];
+ localStorage.removeItem('entries');
+ localStorage.removeItem('currentUser');
+ localStorage.removeItem('googleUser');
+ localStorage.removeItem('currentUserUid');
+ currentUser = null;
+
+ // Sign out of Firebase Auth + Google session if active
+ try { if (window.firebase && firebase.auth) firebase.auth().signOut().catch(()=>{}); } catch(e) {}
+ try { if (window.google && window.google.accounts) window.google.accounts.id.disableAutoSelect(); } catch(e) {}
+
+ if (typeof logFirebaseEvent === 'function') {
+  logFirebaseEvent('Blocked unauthorized login attempt: ' + (attemptedEmail || 'unknown'), 'error');
+ }
+
+ // Show the blocking screen, hide everything else underneath it
+ const blocker = document.getElementById('accessRestrictedScreen');
+ if (blocker) blocker.style.display = 'flex';
+ const appContainer = document.getElementById('app');
+ if (appContainer) appContainer.style.display = 'none';
+ const pinScreen = document.getElementById('pinLockScreen');
+ if (pinScreen) pinScreen.style.display = 'none';
+
+ setTimeout(() => {
+  if (blocker) blocker.style.display = 'none';
+  showGoogleLoginPage();
+ }, 1800);
+}
+
+
 // ---- Email login — real Firebase Authentication, restricted to allowed emails ----
 function handleEmailLogin() {
  const emailInp = document.getElementById('loginEmail');
@@ -3776,10 +4152,20 @@ function handleEmailLogin() {
  const resetBtn = () => { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-arrow-right"></i> Continue'; } };
 
  firebase.auth().signInWithEmailAndPassword(email, password)
-  .then(() => {
-   currentUser = { name: email.split('@')[0], email, picture: '', source: 'email' };
+  .then((userCredential) => {
+   const user = userCredential.user;
+   // 🔒 Save uid from Firebase authentication
+   currentUser = { 
+    uid: user.uid, // Firebase UID
+    name: email.split('@')[0], 
+    email, 
+    picture: '', 
+    source: 'email' 
+   };
    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+   localStorage.setItem('currentUserUid', user.uid); // Separate storage
    localStorage.setItem('lastLoginEmail', email);
+   console.log('✅ Email login successful, uid:', user.uid);
    showNotification('Welcome back! ✓', 'success');
    resetBtn();
    hideGoogleLoginPage();
@@ -3788,10 +4174,20 @@ function handleEmailLogin() {
    if (err.code === 'auth/user-not-found') {
     // First time this allowed email logs in — create the account automatically
     firebase.auth().createUserWithEmailAndPassword(email, password)
-     .then(() => {
-      currentUser = { name: email.split('@')[0], email, picture: '', source: 'email' };
+     .then((userCredential) => {
+      const user = userCredential.user;
+      // 🔒 Save uid from Firebase authentication
+      currentUser = { 
+       uid: user.uid, // Firebase UID
+       name: email.split('@')[0], 
+       email, 
+       picture: '', 
+       source: 'email' 
+      };
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      localStorage.setItem('currentUserUid', user.uid); // Separate storage
       localStorage.setItem('lastLoginEmail', email);
+      console.log('✅ Account created, uid:', user.uid);
       showNotification('Account created! Welcome 🎉', 'success');
       resetBtn();
       hideGoogleLoginPage();
@@ -4115,13 +4511,58 @@ window.addEventListener('unhandledrejection', (event) => {
 window.addEventListener('online', () => {
   console.log('✓ Internet connected');
   showNotification('Internet connection restored', 'success');
+  // Attempt to sync with Firebase when coming back online
+  if (firebaseReady && currentUser) {
+    setTimeout(() => {
+      loadEntriesFromFirebase()
+        .then(() => {
+          console.log('✓ Synced with Firebase');
+          renderWallet();
+          renderEntries();
+        })
+        .catch(err => console.warn('Sync failed:', err));
+    }, 500);
+  }
 });
 
 window.addEventListener('offline', () => {
   console.warn('⚠ Internet disconnected');
   showNotification('Internet disconnected - using offline mode', 'warning');
+  updateFirebaseStatus(false);
 });
 
 </script>
+<!-- ===== Firebase Event Log Panel (Bell icon) ===== -->
+<div id="eventLogOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9500;" onclick="toggleEventLogPanel()"></div>
+<div id="eventLogPanel" style="display:none;position:fixed;top:0;right:0;bottom:0;width:88%;max-width:340px;background:#11151c;z-index:9501;box-shadow:-8px 0 24px rgba(0,0,0,.4);overflow-y:auto;">
+ <div style="padding:18px 16px;border-bottom:1px solid #1f2430;display:flex;align-items:center;justify-content:space-between;">
+  <div style="color:#fff;font-weight:700;font-size:16px;">Activity Log</div>
+  <i class="ti ti-x" style="color:#8b9099;cursor:pointer;font-size:18px;" onclick="toggleEventLogPanel()"></i>
+ </div>
+ <div id="eventLogLiveStatus" style="padding:14px 16px;border-bottom:1px solid #1f2430;"></div>
+ <div id="eventLogList" style="padding:10px 14px;"></div>
+</div>
+
+<!-- ===== Entry Sync Status Panel (Manage Accounts) ===== -->
+<div id="syncStatusOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9500;" onclick="toggleSyncStatusPanel()"></div>
+<div id="syncStatusPanel" style="display:none;position:fixed;top:0;right:0;bottom:0;width:88%;max-width:340px;background:#11151c;z-index:9501;box-shadow:-8px 0 24px rgba(0,0,0,.4);overflow-y:auto;">
+ <div style="padding:18px 16px;border-bottom:1px solid #1f2430;display:flex;align-items:center;justify-content:space-between;">
+  <div style="color:#fff;font-weight:700;font-size:16px;">Entry Sync Status</div>
+  <i class="ti ti-x" style="color:#8b9099;cursor:pointer;font-size:18px;" onclick="toggleSyncStatusPanel()"></i>
+ </div>
+ <div id="syncAccountInfo" style="padding:14px 16px;border-bottom:1px solid #1f2430;"></div>
+ <div id="syncStatusSummary" style="padding:14px 16px;border-bottom:1px solid #1f2430;font-size:13px;color:#8b9099;"></div>
+ <div id="syncStatusList" style="padding:10px 14px;"></div>
+</div>
+
+<!-- ===== Access Restricted Blocker (unauthorized login attempt) ===== -->
+<div id="accessRestrictedScreen" style="display:none;position:fixed;inset:0;z-index:99999;background:#0b0e14;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
+ <div style="width:64px;height:64px;border-radius:50%;background:rgba(240,100,100,.12);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+  <i class="ti ti-lock" style="font-size:30px;color:#f06464;"></i>
+ </div>
+ <div style="color:#fff;font-weight:700;font-size:19px;margin-bottom:8px;font-family:'Poppins',sans-serif;">Access restricted</div>
+ <div style="color:#8b9099;font-size:13.5px;max-width:280px;line-height:1.5;">This Google account isn't authorized to use this app. Redirecting to login…</div>
+</div>
+
 </body>
 </html>
